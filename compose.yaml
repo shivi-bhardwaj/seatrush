@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:17'
+    environment:
+      - 'POSTGRES_DB=seatrush'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=seatrush'
+    ports:
+      - '5433:5432'
