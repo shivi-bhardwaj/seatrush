@@ -1,3 +1,6 @@
 spring:
   application:
     name: seatrush
+  jpa:
+    hibernate:
+      ddl-auto: validate
