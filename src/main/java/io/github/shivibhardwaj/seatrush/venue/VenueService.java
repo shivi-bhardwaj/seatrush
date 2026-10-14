@@ -1,5 +1,6 @@
 package io.github.shivibhardwaj.seatrush.venue;
 
+import io.github.shivibhardwaj.seatrush.common.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +23,18 @@ public class VenueService {
     }
 
     public Venue getVenue(Long venueId) {
-        return venueRepo.findById(venueId).orElseThrow(()->new RuntimeException("venue " + venueId + " not found"));
+        return findVenue(venueId);
     }
 
     @Transactional
     public Venue rename(Long venueId, String newName) {
-        Venue venue = venueRepo.findById(venueId).orElseThrow(() -> new RuntimeException("venue " + venueId + " not found"));
+        Venue venue = findVenue(venueId);
         venue.setName(newName);
         return venue;
+    }
+
+    private Venue findVenue(Long venueId) {
+        return venueRepo.findById(venueId)
+                .orElseThrow(() -> new NotFoundException("Venue", venueId));
     }
 }
