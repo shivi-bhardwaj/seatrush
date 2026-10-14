@@ -4,3 +4,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
