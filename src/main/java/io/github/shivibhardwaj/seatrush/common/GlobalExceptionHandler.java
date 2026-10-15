@@ -36,4 +36,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
+    @ExceptionHandler
+    public ProblemDetail handleUnexpected(Exception ex) {
+        logger.error("Unhandled error", ex);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Something went wrong. Please try again later");
+    }
+
 }
