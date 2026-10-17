@@ -1,6 +1,7 @@
 package io.github.shivibhardwaj.seatrush.venue;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,9 +13,11 @@ import java.net.URI;
 public class VenueController {
 
     private final VenueService venueService;
+    private final SeatService seatService;
 
-    public VenueController(VenueService venueService) {
+    public VenueController(VenueService venueService, SeatService seatService) {
         this.venueService = venueService;
+        this.seatService = seatService;
     }
 
     @PostMapping
@@ -35,5 +38,13 @@ public class VenueController {
     @PatchMapping("/{id}")
     public VenueResponse rename(@PathVariable Long id, @Valid @RequestBody RenameVenueRequest request){
         return VenueResponse.from(venueService.rename(id, request.name()));
+    }
+
+    @PostMapping("/{venueId}/seats")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreateSeatsResponse createSeats(@PathVariable Long venueId,
+                                           @Valid @RequestBody CreateSeatsRequest request){
+        int created = seatService.createSeats(venueId, request.section(), request.rows(), request.seatsPerRow());
+        return new CreateSeatsResponse(venueId, request.section(), created);
     }
 }
