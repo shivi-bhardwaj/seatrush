@@ -1,6 +1,9 @@
 package io.github.shivibhardwaj.seatrush.user;
 
+import io.github.shivibhardwaj.seatrush.common.ConflictException;
+import io.github.shivibhardwaj.seatrush.common.ConstraintViolations;
 import io.github.shivibhardwaj.seatrush.common.NotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +23,14 @@ public class UserService {
     @Transactional
     public User createUser(String email, String rawPassword, String firstName, String lastName, UserRole role) {
         String passwordHash = passwordEncoder.encode(rawPassword);
-        return userRepo.save(new User(email,passwordHash, firstName, lastName, role));
+        try {
+            return userRepo.save(new User(email, passwordHash, firstName, lastName, role));
+        } catch (DataIntegrityViolationException ex) {
+            if (ConstraintViolations.isViolation(ex, "uk_users_email")) {
+                throw new ConflictException("Email already registered", ex);
+            }
+            throw ex;
+        }
     }
 
     public User getUser(Long userId) {

@@ -1,5 +1,8 @@
 package io.github.shivibhardwaj.seatrush.venue;
 
+import io.github.shivibhardwaj.seatrush.common.ConflictException;
+import io.github.shivibhardwaj.seatrush.common.ConstraintViolations;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +30,15 @@ public class SeatService {
                 seats.add(new Seat(String.valueOf(n), row, section, venue));
             }
         }
-        seatRepo.saveAll(seats);
+        try {
+            seatRepo.saveAll(seats);
+        } catch (DataIntegrityViolationException ex) {
+            if (ConstraintViolations.isViolation(ex, "uk_seat_position")) {
+                throw new ConflictException(
+                        "Seats already exist in venue " + venueId + ", section " + section, ex);
+            }
+            throw ex;
+        }
         return seats.size();
     }
 }
