@@ -1,5 +1,6 @@
 package io.github.shivibhardwaj.seatrush.event;
 
+import io.github.shivibhardwaj.seatrush.common.BusinessRuleException;
 import io.github.shivibhardwaj.seatrush.common.NotFoundException;
 import io.github.shivibhardwaj.seatrush.user.User;
 import io.github.shivibhardwaj.seatrush.user.UserService;
@@ -28,6 +29,9 @@ public class EventService {
                              Instant startsAt, Instant saleOpensAt, String description){
         Venue venue = venueService.getVenue(venueId);
         User user = userService.getUser(organizerId);
+        if(!user.canOrganizeEvents()){
+            throw new BusinessRuleException("User " + organizerId + " cannot organize events");
+        }
         return eventRepo.save(new Event(title, description, startsAt, saleOpensAt, user, venue));
     }
 

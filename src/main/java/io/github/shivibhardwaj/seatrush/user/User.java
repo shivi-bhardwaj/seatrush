@@ -35,4 +35,8 @@ public class User extends BaseEntity {
         this.lastName = lastName;
         this.role = Objects.requireNonNull(role, "role");
     }
+
+    public boolean canOrganizeEvents(){
+        return role == UserRole.ORGANIZER;
+    }
 }

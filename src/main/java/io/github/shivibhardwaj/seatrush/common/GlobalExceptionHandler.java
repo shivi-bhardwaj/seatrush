@@ -48,4 +48,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "Something went wrong. Please try again later");
     }
 
+    @ExceptionHandler(BusinessRuleException.class)
+    public ProblemDetail handleBusinessRule(BusinessRuleException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
+    }
 }
