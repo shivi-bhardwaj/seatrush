@@ -2,7 +2,7 @@ package io.github.shivibhardwaj.seatrush.event;
 
 public enum EventStatus {
     DRAFT,
-    ON_SALE,
+    PUBLISHED,
     SOLD_OUT,
     CANCELLED,
     COMPLETED

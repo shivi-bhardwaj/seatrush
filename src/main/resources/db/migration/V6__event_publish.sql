@@ -1,0 +1,3 @@
+ALTER TABLE event DROP CONSTRAINT ck_event_status;
+ALTER TABLE event ADD CONSTRAINT ck_event_status
+    CHECK (status IN ('DRAFT', 'PUBLISHED', 'SOLD_OUT', 'CANCELLED', 'COMPLETED'));

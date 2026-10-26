@@ -41,4 +41,9 @@ public class SeatService {
         }
         return seats.size();
     }
+
+    @Transactional(readOnly = true)
+    public List<Seat> getSeats(Long venueId){
+        return seatRepo.findByVenueId(venueId);
+    }
 }

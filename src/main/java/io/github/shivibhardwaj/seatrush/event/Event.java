@@ -59,4 +59,15 @@ public class Event extends BaseEntity {
     public boolean canAddPriceTier(){
         return status == EventStatus.DRAFT;
     }
+
+    public boolean canPublish(){
+        return status == EventStatus.DRAFT;
+    }
+
+    public void publish(){
+        if(!canPublish()){
+            throw new IllegalStateException("Event " + getId() + " cannot be published from " + status);
+        }
+        this.status = EventStatus.PUBLISHED;
+    }
 }
