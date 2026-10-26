@@ -29,14 +29,14 @@ public class PriceTier extends BaseEntity {
     @JoinColumn(name="event_id", nullable=false)
     private Event event;
 
-    public PriceTier(String name, BigDecimal price, Currency currency, Event event) {
+    public PriceTier(String name, BigDecimal price, Event event) {
         Objects.requireNonNull(price, "price");
         if (price.signum() < 0) {
             throw new IllegalArgumentException("price must not be negative: " + price);
         }
         this.name = Objects.requireNonNull(name, "name");
-        this.price = price;
-        this.currency = Objects.requireNonNull(currency, "currency");
+        this.price = price.setScale(2);
         this.event = Objects.requireNonNull(event, "event");
+        this.currency = event.getCurrency();
     }
 }

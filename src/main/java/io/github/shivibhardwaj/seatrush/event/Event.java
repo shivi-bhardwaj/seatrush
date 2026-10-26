@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Currency;
 
 @Entity
 @Table(name="event")
@@ -40,7 +41,11 @@ public class Event extends BaseEntity {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
-    public Event(String title, String description, Instant startsAt, Instant saleOpensAt, User organizer, Venue venue) {
+    @Column(nullable = false, length = 3)
+    private Currency currency;
+
+    public Event(String title, String description, Instant startsAt, Instant saleOpensAt,
+                 User organizer, Venue venue, Currency currency) {
         this.title = title;
         this.description = description;
         this.startsAt = startsAt;
@@ -48,5 +53,10 @@ public class Event extends BaseEntity {
         this.organizer = organizer;
         this.venue = venue;
         this.status = EventStatus.DRAFT;
+        this.currency = currency;
+    }
+
+    public boolean canAddPriceTier(){
+        return status == EventStatus.DRAFT;
     }
 }

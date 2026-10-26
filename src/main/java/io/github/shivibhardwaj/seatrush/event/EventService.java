@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Currency;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,13 +27,14 @@ public class EventService {
 
     @Transactional
     public Event createEvent(Long venueId, Long organizerId, String title,
-                             Instant startsAt, Instant saleOpensAt, String description){
+                             Instant startsAt, Instant saleOpensAt, String description,
+                             Currency currency){
         Venue venue = venueService.getVenue(venueId);
         User user = userService.getUser(organizerId);
         if(!user.canOrganizeEvents()){
             throw new BusinessRuleException("User " + organizerId + " cannot organize events");
         }
-        return eventRepo.save(new Event(title, description, startsAt, saleOpensAt, user, venue));
+        return eventRepo.save(new Event(title, description, startsAt, saleOpensAt, user, venue, currency));
     }
 
     public Event getEvent(Long eventId){
