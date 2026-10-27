@@ -16,12 +16,15 @@ public class EventController {
     private final EventService eventService;
     private final PriceTierService priceTierService;
     private final EventPublishService eventPublishService;
+    private final EventSeatService eventSeatService;
 
     public EventController(EventService eventService, PriceTierService priceTierService,
-                           EventPublishService eventPublishService) {
+                           EventPublishService eventPublishService,
+                           EventSeatService eventSeatService) {
         this.eventService = eventService;
         this.priceTierService = priceTierService;
         this.eventPublishService = eventPublishService;
+        this.eventSeatService = eventSeatService;
     }
 
     @PostMapping
@@ -59,5 +62,12 @@ public class EventController {
     public PublishEventResponse publish(@PathVariable Long eventId, @Valid @RequestBody PublishEventRequest request){
         int created = eventPublishService.publish(eventId, request.sectionTiers());
         return new PublishEventResponse(eventId, EventStatus.PUBLISHED, created);
+    }
+
+    @GetMapping("/{eventId}/seats")
+    public List<EventSeatResponse> getSeats(@PathVariable Long eventId){
+        return eventSeatService.getSeats(eventId).stream()
+                .map(EventSeatResponse::from)
+                .toList();
     }
 }

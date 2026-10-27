@@ -39,4 +39,8 @@ public class EventSeat extends BaseEntity {
         this.priceTier = Objects.requireNonNull(priceTier, "priceTier");
         this.status = EventSeatStatus.AVAILABLE;
     }
+
+    public boolean isAvailable(){
+        return status == EventSeatStatus.AVAILABLE;
+    }
 }
