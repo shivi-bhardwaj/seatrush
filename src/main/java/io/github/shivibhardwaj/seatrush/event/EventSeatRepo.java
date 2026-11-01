@@ -3,6 +3,7 @@ package io.github.shivibhardwaj.seatrush.event;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,4 +23,13 @@ public interface EventSeatRepo extends Repository<EventSeat, Long> {
             order by s.section, s.rowLabel, s.id
             """)
     List<EventSeat> findSeatMap(Long eventId);
+
+    @Query("""
+            select es from EventSeat es
+            join fetch es.seat
+            join fetch es.priceTier
+            where es.event.id = :eventId
+            and es.id in :ids
+            """)
+    List<EventSeat> findForHold(Long eventId, Collection<Long> ids);
 }

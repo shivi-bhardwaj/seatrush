@@ -14,3 +14,8 @@ logging:
       hibernate:
         SQL: DEBUG
       springframework.orm.jpa.JpaTransactionManager: DEBUG
+
+seatrush:
+  booking:
+    hold-duration: 10m
+    max-seats-per-user: 6

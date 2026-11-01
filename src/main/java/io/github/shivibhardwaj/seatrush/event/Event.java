@@ -70,4 +70,9 @@ public class Event extends BaseEntity {
         }
         this.status = EventStatus.PUBLISHED;
     }
+
+    public boolean canBook(Instant now){
+        return status == EventStatus.PUBLISHED &&
+                !now.isBefore(saleOpensAt) && now.isBefore(startsAt);
+    }
 }

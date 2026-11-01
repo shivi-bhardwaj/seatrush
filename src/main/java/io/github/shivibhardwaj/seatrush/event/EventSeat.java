@@ -43,4 +43,16 @@ public class EventSeat extends BaseEntity {
     public boolean isAvailable(){
         return status == EventSeatStatus.AVAILABLE;
     }
+
+    public boolean canHold(){
+        return isAvailable();
+    }
+
+    public void hold(){
+        if (!canHold()){
+            throw new IllegalStateException("Event seat " + getId() + " cannot be held from " + status);
+        }
+
+        status = EventSeatStatus.HELD;
+    }
 }

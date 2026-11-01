@@ -37,7 +37,7 @@ public class BookingItem extends BaseEntity {
         this.eventSeat = Objects.requireNonNull(eventSeat, "eventSeat");
 
         if(!eventSeat.getEvent().getId().equals(booking.getEvent().getId())){
-            throw new IllegalArgumentException("event seat does not belong to this seat");
+            throw new IllegalArgumentException("event seat does not belong to this booking's event");
         }
 
         PriceTier priceTier = eventSeat.getPriceTier();
