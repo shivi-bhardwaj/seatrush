@@ -7,5 +7,6 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 public record CreateBookingRequest(@NotNull Long userId,
-                                   @NotEmpty @Size(max = 10) Set<@NotNull Long> eventSeatIds) {
+                                   @NotEmpty @Size(max = 10, message = "at most 10 seats per request")
+                                   Set<@NotNull Long> eventSeatIds) {
 }

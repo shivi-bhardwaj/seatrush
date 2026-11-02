@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class BookingService {
 
     @Transactional
     public HoldResult hold(Long eventId, Long userId, Set<Long> eventSeatIds, UUID idempotencyKey){
-        Instant now = Instant.now();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MICROS);
 
         //1: retry of an earlier request with the same key -> same booking back
         Optional<Booking> existing = bookingRepo.findByIdempotencyKey(idempotencyKey);
